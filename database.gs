@@ -12,6 +12,7 @@ Database.fromSpreadsheet = function(spreadsheet) {
   });
 };
 
+
 Database.prototype.getTable = function(tableName) {
   
   if (!this._tables[tableName]) {
@@ -160,3 +161,28 @@ Table.prototype.indexBy = function(column) {
   
   return result;
 };
+
+function parseSheetAsTable(sheet) {
+
+  var matrix = sheet.getDataRange().getValues();
+  
+  var headers = matrix[0];
+  
+  table = {
+    headers: headers,
+    rows: [],
+  };
+  
+  matrix.slice(1).forEach(function(row) {
+  
+    var record = {};
+    row.forEach(function(column, index) {
+    
+      record[headers[index]] = column;
+    });
+    
+    table.rows.push(record);
+  });
+  
+  return table;
+}
